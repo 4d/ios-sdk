@@ -33,13 +33,13 @@ let package = Package(
         .package(url: "https://github.com/nvzqz/FileKit.git" , .revision("48b5ddb287f131a5c628badc819b880453f94449")),
         .package(url: "https://github.com/phimage/CallbackURLKit.git" , .revision("736aece485957c4846db97bb882165e1e394adf0")), // Requires macOS(.v10_14)
         .package(url: "https://github.com/phimage/Prephirences.git" , .revision("HEAD"))
-        
+
 //        .package(url: "https://github.com/ArtSabintsev/Guitar.git", .revision("7609e913619c606b7b1e3f251f18b906a1ef7272")), // Package.swift not updated
 //        .package(url: "https://github.com/IBAnimatable/IBAnimatable.git", .revision("0776c5c099b308cd0cffe14f8cf89f0371153d03")), // not for macOS
 //        .package(url: "https://github.com/onevcat/Kingfisher.git" , .revision("68b7aa28a1d9f03ac00f2eeb0c522422dcd562bb")), // not for macOS
 //        .package(url: "https://github.com/devicekit/DeviceKit.git" , .revision("89452446badb4391899e989b8ae99c84488457f5")), // not for macOS
 //        .package(url: "https://github.com/SwiftKickMobile/SwiftMessages.git" , from: "7.0.0") // No Package.swift file
-//        .package(url: "https://github.com/phimage/ValueTransformerKit.git" , from: "1.2.0") // No Package.swift file
+//        .package(url: "https://github.com/phimage/ValueTransformerKit.git" , from: "1.2.1")
 //        .package(url: "https://github.com/xmartlabs/Eureka.git" , from: "5.0.0") // No Package.swift file
 
     ],
