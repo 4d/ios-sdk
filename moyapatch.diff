@@ -1,44 +1,63 @@
 diff --git a/Moya.xcodeproj/project.pbxproj b/Moya.xcodeproj/project.pbxproj
-index a6568ef..abe537e 100644
+index 86db41b..0b3c0dd 100644
 --- a/Moya.xcodeproj/project.pbxproj
 +++ b/Moya.xcodeproj/project.pbxproj
-@@ -80,6 +80,8 @@
- 		BAFB3C28D3BF17C52FDA8FE4 /* testImage.png in Resources */ = {isa = PBXBuildFile; fileRef = CA93F1BAD55FF95EDE17EE61 /* testImage.png */; };
- 		BEAA605B30BE7651BA5C61A4 /* Plugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A693AF0E88E83E91A47A99 /* Plugin.swift */; };
- 		C1B5E2325B210232599B0D1A /* ErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F112022D8F42844A7D5CB5C /* ErrorTests.swift */; };
-+		C40DBBF222F05EBD00B44064 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1463B8721F8A8A5A002D9C4F /* Result.framework */; };
-+		C40DBBF322F05EC000B44064 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1463B8731F8A8A5B002D9C4F /* Alamofire.framework */; };
- 		D00AA2514CD6B1276B845BA7 /* ReactiveMoya.h in Headers */ = {isa = PBXBuildFile; fileRef = 019BF5A88BB928EBDFD944FE /* ReactiveMoya.h */; settings = {ATTRIBUTES = (Public, ); }; };
- 		D6A04B657A83CA2FF80ABCF4 /* Moya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 559D567FD0DA37D6CC98FF92 /* Moya.framework */; };
- 		DA631A5B37F36DA17E135F14 /* SignalProducer+MoyaSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AFAFEA29CDFABC559F0BE2 /* SignalProducer+MoyaSpec.swift */; };
-@@ -258,6 +260,8 @@
+@@ -46,6 +46,8 @@
+ 		469A06BC1F70637C001153A0 /* GitHubAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469A06B01F705DDE001153A0 /* GitHubAPI.swift */; };
+ 		469A06BD1F70637C001153A0 /* GitHubUserContentAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469A06AD1F705DDD001153A0 /* GitHubUserContentAPI.swift */; };
+ 		469A06BE1F70637C001153A0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 469A06AF1F705DDD001153A0 /* Images.xcassets */; };
++		48B32AC82317C6C000154EFC /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48B32AC72317C6C000154EFC /* Alamofire.framework */; };
++		48B32AC92317C6C000154EFC /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 48B32AC72317C6C000154EFC /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+ 		49C61E884A595E94758B5643 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF1994427C5440527B03B31 /* Endpoint.swift */; };
+ 		4A609CED953E8A6C59AD01A1 /* NetworkActivityPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD20F6A819D899E3278E903 /* NetworkActivityPlugin.swift */; };
+ 		5054F87AFF61EAC0097F88BD /* MultiTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4EAC41B82FF5081DEC4808 /* MultiTarget.swift */; };
+@@ -136,6 +138,17 @@
+ 			name = "Embed Frameworks";
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
++		48B32ACA2317C6C000154EFC /* Embed Frameworks */ = {
++			isa = PBXCopyFilesBuildPhase;
++			buildActionMask = 2147483647;
++			dstPath = "";
++			dstSubfolderSpec = 10;
++			files = (
++				48B32AC92317C6C000154EFC /* Alamofire.framework in Embed Frameworks */,
++			);
++			name = "Embed Frameworks";
++			runOnlyForDeploymentPostprocessing = 0;
++		};
+ /* End PBXCopyFilesBuildPhase section */
+ 
+ /* Begin PBXFileReference section */
+@@ -175,6 +188,7 @@
+ 		469A06AE1F705DDD001153A0 /* GiphyAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiphyAPI.swift; sourceTree = "<group>"; };
+ 		469A06AF1F705DDD001153A0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+ 		469A06B01F705DDE001153A0 /* GitHubAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubAPI.swift; sourceTree = "<group>"; };
++		48B32AC72317C6C000154EFC /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		4C7A20CC38EB5A0221E6EA34 /* MoyaProvider+RxSpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "MoyaProvider+RxSpec.swift"; sourceTree = "<group>"; };
+ 		4D3C74EB65D75BC6DFCC646E /* RxMoya.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RxMoya.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		5365911118011A3A4FE0CD07 /* MoyaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoyaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+@@ -255,6 +269,7 @@
  			isa = PBXFrameworksBuildPhase;
  			buildActionMask = 2147483647;
  			files = (
-+				C40DBBF222F05EBD00B44064 /* Result.framework in Frameworks */,
-+				C40DBBF322F05EC000B44064 /* Alamofire.framework in Frameworks */,
++				48B32AC82317C6C000154EFC /* Alamofire.framework in Frameworks */,
  			);
  			runOnlyForDeploymentPostprocessing = 0;
  		};
-@@ -953,6 +957,10 @@
- 				DYLIB_CURRENT_VERSION = 1;
- 				DYLIB_INSTALL_NAME_BASE = "@rpath";
- 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-+				FRAMEWORK_SEARCH_PATHS = (
-+					"$(inherited)",
-+					"$(PROJECT_DIR)/Carthage/Build/iOS",
-+				);
- 				"FRAMEWORK_SEARCH_PATHS[sdk=appletv*]" = (
- 					"$(SRCROOT)/Carthage/Build/tvOS/",
- 					"$(inherited)",
-@@ -1462,6 +1470,10 @@
- 				DYLIB_CURRENT_VERSION = 1;
- 				DYLIB_INSTALL_NAME_BASE = "@rpath";
- 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-+				FRAMEWORK_SEARCH_PATHS = (
-+					"$(inherited)",
-+					"$(PROJECT_DIR)/Carthage/Build/iOS",
-+				);
- 				"FRAMEWORK_SEARCH_PATHS[sdk=appletv*]" = (
- 					"$(SRCROOT)/Carthage/Build/tvOS/",
- 					"$(inherited)",
+@@ -272,6 +287,7 @@
+ 		0E7C5E12BDDF8CD3A778D84C /* Frameworks */ = {
+ 			isa = PBXGroup;
+ 			children = (
++				48B32AC72317C6C000154EFC /* Alamofire.framework */,
+ 				1463B8731F8A8A5B002D9C4F /* Alamofire.framework */,
+ 			);
+ 			name = Frameworks;
+@@ -591,6 +607,7 @@
+ 				054614992B184CBD90E510ED /* Sources */,
+ 				E83509792249AE1FFE8EA7B7 /* Resources */,
+ 				B2955433F474AC60FE7417A3 /* Frameworks */,
++				48B32ACA2317C6C000154EFC /* Embed Frameworks */,
+ 			);
+ 			buildRules = (
+ 			);
