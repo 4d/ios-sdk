@@ -6,18 +6,9 @@ import PackageDescription
 let package = Package(
     name: "SDK",
     platforms: [
-        .macOS(.v10_14),
-        .iOS(.v9)
-    ],
-    products: [
-        // Products define the executables and libraries produced by a package, and make them visible to other packages.
-        .library(
-            name: "SDK",
-            targets: ["SDK"]),
+        .iOS(.v12)
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "http://srv-git:3000/qmobile/QMobileAPI.git" , .revision("HEAD")),
         .package(url: "http://srv-git:3000/qmobile/QMobileDataStore.git" , .revision("HEAD")),
         .package(url: "http://srv-git:3000/qmobile/QMobileDataSync.git" , .revision("HEAD")),
