@@ -6,6 +6,7 @@ import PackageDescription
 let package = Package(
     name: "SDK",
     platforms: [
+        .macOS(.v10_14),
         .iOS(.v12)
     ],
     dependencies: [
@@ -14,9 +15,9 @@ let package = Package(
         .package(url: "http://srv-git:3000/qmobile/QMobileDataSync.git" , .revision("HEAD")),
         .package(url: "http://srv-git:3000/qmobile/QMobileUI.git" , .revision("HEAD")),
 
-        .package(url: "https://github.com/Alamofire/Alamofire.git" , from: "4.8.2"),
+        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.0.0-rc.1"),
         .package(url: "https://github.com/DaveWoodCom/XCGLogger.git" , from: "7.0.0"),
-        .package(url: "https://github.com/Moya/Moya.git" , from: "13.0.1"),
+        .package(url: "https://github.com/Moya/Moya.git", from: "14.0.0-beta.1"),
         .package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git" , from: "5.0.0"),
         .package(url: "https://github.com/Thomvis/BrightFutures.git" , from: "8.0.1"),
         .package(url: "https://github.com/weichsel/ZIPFoundation.git" , from: "0.9.9"),
