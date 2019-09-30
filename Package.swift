@@ -17,7 +17,7 @@ let package = Package(
 
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.0.0-rc.2"),
         .package(url: "https://github.com/DaveWoodCom/XCGLogger.git" , from: "7.0.0"),
-        .package(url: "https://github.com/Moya/Moya.git", from: "14.0.0-beta.2"),
+        .package(url: "https://github.com/Moya/Moya.git", from: "14.0.0-beta.3"),
         .package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git" , from: "5.0.0"),
         .package(url: "https://github.com/Thomvis/BrightFutures.git" , from: "8.0.1"),
         .package(url: "https://github.com/weichsel/ZIPFoundation.git" , from: "0.9.9"),
