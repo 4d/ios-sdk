@@ -2,6 +2,8 @@
 
 frameworks_folder=Carthage/Build/iOS
 archs="i386 armv7"
+apples="apple-ios-simulator apple-ios"
+swiftmodules="swiftdoc swiftmodule"
 
 for arch in $archs
 do
@@ -21,15 +23,26 @@ do
           if [ $c = 1 ]; then
             lipo -remove $arch  "$file_path" -output "$file_path"
             echo "$arch stripped from $name"
-
-            if test -f "$framework/Modules/$name.swiftmodule/$arch.swiftdoc"; then
-              echo "$framework/Modules/$name.swiftmodule/$arch.swiftdoc exist"
-            else
-              echo "$framework/Modules/$name.swiftmodule/$arch.swiftdoc not exist"
-            fi
-            rm -f $framework/Modules/$name.swiftmodule/$arch.swiftdoc
-            rm -f $framework/Modules/$name.swiftmodule/$arch.swiftmodule
           fi
+
+          # swiftmodule
+          for swiftmodule in $swiftmodules
+          do
+            file_path="$framework/Modules/$name.swiftmodule/$arch.$swiftmodule"
+            if test -f $file_path; then
+              echo "remove $file_path"
+              rm -f $file_path
+            fi
+
+            for apple in $apples
+            do
+              file_path="$framework/Modules/$name.swiftmodule/$arch-$apple.$swiftmodule"
+              if test -f $file_path; then
+                echo "remove $file_path"
+                rm -f $file_path
+              fi
+            done
+          done
 
           # symbols
           file_path=$framework".dSYM/Contents/Resources/DWARF/$name"
