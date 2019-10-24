@@ -10,10 +10,10 @@ let package = Package(
         .iOS(.v12)
     ],
     dependencies: [
-        .package(url: "http://srv-git:3000/qmobile/QMobileAPI.git" , .revision("HEAD")),
-        .package(url: "http://srv-git:3000/qmobile/QMobileDataStore.git" , .revision("HEAD")),
-        .package(url: "http://srv-git:3000/qmobile/QMobileDataSync.git" , .revision("HEAD")),
-        .package(url: "http://srv-git:3000/qmobile/QMobileUI.git" , .revision("HEAD")),
+        .package(url: "https://gitlab-4d.private.4d.fr/qmobile/QMobileAPI.git" , .revision("HEAD")),
+        .package(url: "https://gitlab-4d.private.4d.fr/qmobile/QMobileDataStore.git" , .revision("HEAD")),
+        .package(url: "https://gitlab-4d.private.4d.fr/qmobile/QMobileDataSync.git" , .revision("HEAD")),
+        .package(url: "https://gitlab-4d.private.4d.fr/qmobile/QMobileUI.git" , .revision("HEAD")),
 
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.0.0-rc.2"),
         .package(url: "https://github.com/DaveWoodCom/XCGLogger.git", from: "7.0.0"),
