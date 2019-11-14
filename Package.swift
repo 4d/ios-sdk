@@ -28,7 +28,7 @@ let package = Package(
         .package(url: "https://github.com/devicekit/DeviceKit.git", from: "2.3.0")), // not for macOS
         .package(url: "https://github.com/IBAnimatable/IBAnimatable.git", .revision("0776c5c099b308cd0cffe14f8cf89f0371153d03")), // not for macOS
         .package(url: "https://github.com/SwiftKickMobile/SwiftMessages.git" , from: "7.0.0") // No Package.swift file
-        .package(url: "https://github.com/phimage/ValueTransformerKit.git" , from: "1.2.1")
+        .package(url: "https://github.com/phimage/ValueTransformerKit.git" , from: "1.2.3")
         .package(url: "https://github.com/xmartlabs/Eureka.git" , from: "5.0.0") // No Package.swift file
 */
     ],
