@@ -1,0 +1,63 @@
+diff --git a/Moya.xcodeproj/project.pbxproj b/Moya.xcodeproj/project.pbxproj
+index 9994259..d96b5c7 100644
+--- a/Moya.xcodeproj/project.pbxproj
++++ b/Moya.xcodeproj/project.pbxproj
+@@ -46,6 +46,8 @@
+ 		469A06BC1F70637C001153A0 /* GitHubAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469A06B01F705DDE001153A0 /* GitHubAPI.swift */; };
+ 		469A06BD1F70637C001153A0 /* GitHubUserContentAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469A06AD1F705DDD001153A0 /* GitHubUserContentAPI.swift */; };
+ 		469A06BE1F70637C001153A0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 469A06AF1F705DDD001153A0 /* Images.xcassets */; };
++		4804075223FBC73000DA2642 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4804075123FBC73000DA2642 /* Alamofire.framework */; };
++		4804075323FBC73000DA2642 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4804075123FBC73000DA2642 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+ 		49C61E884A595E94758B5643 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF1994427C5440527B03B31 /* Endpoint.swift */; };
+ 		4A609CED953E8A6C59AD01A1 /* NetworkActivityPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD20F6A819D899E3278E903 /* NetworkActivityPlugin.swift */; };
+ 		5054F87AFF61EAC0097F88BD /* MultiTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4EAC41B82FF5081DEC4808 /* MultiTarget.swift */; };
+@@ -136,6 +138,17 @@
+ 			name = "Embed Frameworks";
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
++		4804075423FBC73000DA2642 /* Embed Frameworks */ = {
++			isa = PBXCopyFilesBuildPhase;
++			buildActionMask = 2147483647;
++			dstPath = "";
++			dstSubfolderSpec = 10;
++			files = (
++				4804075323FBC73000DA2642 /* Alamofire.framework in Embed Frameworks */,
++			);
++			name = "Embed Frameworks";
++			runOnlyForDeploymentPostprocessing = 0;
++		};
+ /* End PBXCopyFilesBuildPhase section */
+ 
+ /* Begin PBXFileReference section */
+@@ -175,6 +188,7 @@
+ 		469A06AE1F705DDD001153A0 /* GiphyAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiphyAPI.swift; sourceTree = "<group>"; };
+ 		469A06AF1F705DDD001153A0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+ 		469A06B01F705DDE001153A0 /* GitHubAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubAPI.swift; sourceTree = "<group>"; };
++		4804075123FBC73000DA2642 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		4C7A20CC38EB5A0221E6EA34 /* MoyaProvider+RxSpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "MoyaProvider+RxSpec.swift"; sourceTree = "<group>"; };
+ 		4D3C74EB65D75BC6DFCC646E /* RxMoya.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RxMoya.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		5365911118011A3A4FE0CD07 /* MoyaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoyaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+@@ -255,6 +269,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
++				4804075223FBC73000DA2642 /* Alamofire.framework in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -272,6 +287,7 @@
+ 		0E7C5E12BDDF8CD3A778D84C /* Frameworks */ = {
+ 			isa = PBXGroup;
+ 			children = (
++				4804075123FBC73000DA2642 /* Alamofire.framework */,
+ 				1463B8731F8A8A5B002D9C4F /* Alamofire.framework */,
+ 			);
+ 			name = Frameworks;
+@@ -599,6 +615,7 @@
+ 				054614992B184CBD90E510ED /* Sources */,
+ 				E83509792249AE1FFE8EA7B7 /* Resources */,
+ 				B2955433F474AC60FE7417A3 /* Frameworks */,
++				4804075423FBC73000DA2642 /* Embed Frameworks */,
+ 			);
+ 			buildRules = (
+ 			);
