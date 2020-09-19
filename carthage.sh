@@ -1,4 +1,4 @@
-# carthage-build.sh
+#!/bin/bash
 # Usage example: ./carthage-build.sh --platform iOS
 
 set -euo pipefail
