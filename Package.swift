@@ -6,8 +6,8 @@ import PackageDescription
 let package = Package(
     name: "SDK",
     platforms: [
-        .macOS(.v10_14),
-        .iOS(.v13)
+        .macOS(.v10_15),
+        .iOS(.v14)
     ],
     dependencies: [
         .package(url: "https://gitlab-4d.private.4d.fr/qmobile/QMobileAPI.git" , .revision("HEAD")),
