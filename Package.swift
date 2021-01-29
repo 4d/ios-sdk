@@ -23,7 +23,6 @@ let package = Package(
         .package(url: "https://github.com/nvzqz/FileKit.git", from: "6.0.0"),
         .package(url: "https://github.com/phimage/CallbackURLKit.git", .revision("HEAD")),
         .package(url: "https://github.com/phimage/Prephirences.git", from: "5.1.0"),
-        .package(url: "https://github.com/ArtSabintsev/Guitar.git", from: "1.0.2"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "5.13.4")
         .package(url: "https://github.com/phimage/ValueTransformerKit.git" , from: "1.2.3")
 //         .package(url: "https://github.com/devicekit/DeviceKit.git", from: "2.3.0"), // no mac support
@@ -52,8 +51,7 @@ let package = Package(
                 "ZIPFoundation",
                 "FileKit",
                 "CallbackURLKit",
-                "Prephirences",
-                "Guitar"*/
+                "Prephirences"*/
             ],
             path: "Sources"),
         .testTarget(
