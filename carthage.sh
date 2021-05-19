@@ -21,7 +21,7 @@ echo 'EXCLUDED_ARCHS = $(inherited) $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_
 echo 'ONLY_ACTIVE_ARCH=NO' >> $xcconfig
 echo 'VALID_ARCHS = $(inherited) x86_64' >> $xcconfig
 if [[ ! -z "$BUILD_LIBRARY_FOR_DISTRIBUTION" ]]; then
-    echo 'BUILD_LIBRARY_FOR_DISTRIBUTION=$BUILD_LIBRARY_FOR_DISTRIBUTION' >> $xcconfig  # module stability to test
+    echo "BUILD_LIBRARY_FOR_DISTRIBUTION=$BUILD_LIBRARY_FOR_DISTRIBUTION" >> $xcconfig  # module stability to test
 fi
 export XCODE_XCCONFIG_FILE="$xcconfig"
 echo $XCODE_XCCONFIG_FILE
