@@ -20,7 +20,9 @@ echo 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x8
 echo 'EXCLUDED_ARCHS = $(inherited) $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT)__XCODE_$(XCODE_VERSION_MAJOR))' >> $xcconfig
 echo 'ONLY_ACTIVE_ARCH=NO' >> $xcconfig
 echo 'VALID_ARCHS = $(inherited) x86_64' >> $xcconfig
-# echo 'BUILD_LIBRARY_FOR_DISTRIBUTION=YES' >> $xcconfig  # module stability to test
+if [[ ! -z "$BUILD_LIBRARY_FOR_DISTRIBUTION" ]]; then
+    echo 'BUILD_LIBRARY_FOR_DISTRIBUTION=$BUILD_LIBRARY_FOR_DISTRIBUTION' >> $xcconfig  # module stability to test
+fi
 export XCODE_XCCONFIG_FILE="$xcconfig"
 echo $XCODE_XCCONFIG_FILE
 carthage "$@"

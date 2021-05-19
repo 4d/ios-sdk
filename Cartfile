@@ -1,5 +1,4 @@
 github "IBAnimatable/IBAnimatable"
-github "dennisweissmann/DeviceKit"
 github "SwiftKickMobile/SwiftMessages"
 github "SwiftyJSON/SwiftyJSON"
 github "nvzqz/FileKit" # file management
