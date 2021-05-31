@@ -1,7 +1,7 @@
 #!/bin/bash
 # Usage example: ./carthage-build.sh build --platform iOS
 
-set -euo pipefail
+set -eo pipefail
 
 xcconfig=$(mktemp /tmp/static.xcconfig.XXXXXX)
 trap 'rm -f "$xcconfig"' INT TERM HUP EXIT
