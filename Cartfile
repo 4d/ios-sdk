@@ -1,5 +1,5 @@
 github "IBAnimatable/IBAnimatable"
-github "mesopelagique/SwiftMessages"
+github "SwiftKickMobile/SwiftMessages"
 github "SwiftyJSON/SwiftyJSON"
 github "nvzqz/FileKit" # file management
 github "DaveWoodCom/XCGLogger"
