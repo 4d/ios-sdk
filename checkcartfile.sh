@@ -3,7 +3,7 @@
 # Fix CocoaPods ie. SDK Cartfile.resolved file
 cd ..
 file=CocoaPods/Cartfile.resolved
-url=https://gitfusion.wakanda.io/qmobile/
+url=https://gitlab-4d.private.4d.fr/qmobile/ios/
 alternative=~/QMobile # alernative parent path if the repo are not git repo
 
 sed -i '' '/QMobile/d' $file # remove QMobile form file
