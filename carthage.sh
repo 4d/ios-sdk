@@ -20,6 +20,12 @@ echo 'EXCLUDED_ARCHS = $(inherited) $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_
 if [[ ! -z "$BUILD_LIBRARY_FOR_DISTRIBUTION" ]]; then
     echo "BUILD_LIBRARY_FOR_DISTRIBUTION=$BUILD_LIBRARY_FOR_DISTRIBUTION" >> $xcconfig  # module stability to test
 fi
+if [[ ! -z "$ENABLE_BITCODE" ]]; then
+    echo "ENABLE_BITCODE=$ENABLE_BITCODE" >> $xcconfig
+else
+    echo "ENABLE_BITCODE=YES" >> $xcconfig  # enable bitcode by default
+fi
+
 export XCODE_XCCONFIG_FILE="$xcconfig"
 cat $XCODE_XCCONFIG_FILE
 
