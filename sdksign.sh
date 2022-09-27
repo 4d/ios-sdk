@@ -4,7 +4,7 @@ frameworks_folder=$3
 if [ -z "$frameworks_folder" ]; then
 	frameworks_folder="Carthage/Build/iOS"
 fi
-signApp=buildChain/SignApp.sh
+signApp=./SignApp.sh
 
 # echo "strip arch "$arch
 for framework in $frameworks_folder/*
