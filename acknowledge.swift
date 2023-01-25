@@ -24,6 +24,13 @@ struct License: Streamable, Hashable {
     var body: String {
         return legalText
     }
+
+    var dico: [String: String] {
+        return [
+            "name": libraryName,
+            "text": legalText
+        ]
+    }
 }
 
 func == (left: License, right: License) -> Bool {
@@ -46,10 +53,15 @@ extension Sequence where Iterator.Element: Hashable {
     }
 }
 
-func run() throws {
-
+func run(arguments: [String]) throws {
     let carthageDir = "Carthage"
-    let outputFile = "LICENSES.md"
+    var format = "md"
+    if arguments.count > 1 {
+        format = arguments[1]
+    }
+    print("\(format)")
+
+    let outputFile: String = "LICENSES.\(format)"
     let options: FileManager.DirectoryEnumerationOptions = [.skipsPackageDescendants, .skipsHiddenFiles]
 
     let fileManager = FileManager.default
@@ -73,11 +85,10 @@ func run() throws {
     // Get just the LICENSE files and convert them to License structs
 
     let licenseURLs = allURLs.filter { url in
-        let pods = url.pathComponents.filter { $0 == "Pods" }
-        if !pods.isEmpty {
+        if !url.pathComponents.filter({ $0 == "Pods" }).isEmpty || !url.pathComponents.filter({ $0 == "Tests" }).isEmpty {
             return false
         }
-        return url.lastPathComponent.range(of: "LICENSE") != nil || url.lastPathComponent.range(of: "LICENCE") != nil
+        return url.lastPathComponent.range(of: "LICENSE") != nil || url.lastPathComponent.range(of: "LICENCE") != nil || url.lastPathComponent.range(of: "License") != nil
     }
 
     var licenses = licenseURLs.compactMap { try? getLicense($0) }
@@ -91,13 +102,18 @@ func run() throws {
     licenses = licenses.sorted { (left, right) -> Bool in
         return left.title.compare(right.title).rawValue < 0
     }
-    let html = licenses.map { $0.writableString }.joined(separator: "\n\n")
-    try html.write(toFile: outputFile, atomically: false, encoding: .utf8)
+    var output: String = "unknown format"
+    if format == "md" {
+        output = licenses.map { $0.writableString }.joined(separator: "\n\n")
+    } else if format == "json" {
+        output = String(data: (try? JSONSerialization.data(withJSONObject: licenses.map { $0.dico }, options: .prettyPrinted)) ?? Data(), encoding: .utf8) ?? ""
+    }
+    try output.write(toFile: outputFile, atomically: false, encoding: .utf8)
 }
 
 func main() {
     do {
-        try run()
+        try run(arguments: CommandLine.arguments)
     } catch let error as NSError {
         print(error.localizedDescription)
     }
