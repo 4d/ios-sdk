@@ -10,6 +10,10 @@ To build iOS SDK some tools to be installed:
 - [Carthage](https://github.com/Carthage/Carthage/issues/1194)
   - could be installed with [brew](https://brew.sh/) `brew upgrade carthage`
 
+Not mandatory but helpful
+- [xcpretty](https://github.com/xcpretty/xcpretty) to have better log
+- [xprojup](https://github.com/phimage/xprojup) to remove warning on imported project by upgrading it
+
 ## Build with Carthage
 
 :construction:
