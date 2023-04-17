@@ -13,6 +13,7 @@ To build iOS SDK some tools to be installed:
 Not mandatory but helpful
 - [xcpretty](https://github.com/xcpretty/xcpretty) to have better log
 - [xprojup](https://github.com/phimage/xprojup) to remove warning on imported project by upgrading it
+- [rome](https://github.com/tmspzz/Rome) to speed up some recurrent build by managing the cache
 
 ## Build with Carthage
 
