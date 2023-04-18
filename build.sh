@@ -2,7 +2,6 @@
 
 #GIT_BRANCH="main"
 GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-GIT_URL=https://github.com/4d/ios-
 
 CARTHAGE_CHECKOUT_OPTIONS=""
 CARTHAGE_BUILD_OPTIONS="--cache-builds --no-use-binaries"
@@ -34,21 +33,22 @@ fi
 
 echo "➡️ Edit cartfile with last QMobile hash"
 
-file=Cartfile.resolved
+file="$SCRIPT_DIR/Cartfile.resolved"
 echo "- before:"
-cat $file
+cat "$file"
 
 # remove QMobile from file
-sed -i '' '/QMobile/d' $file
+sed -i '' '/QMobile/d' "$file"
 
-modules="QMobileAPI QMobileDataStore" # QMobileDataSync QMobileUI"
-for folder in $modules; do
-    echo $folder
-    hash=$(git ls-remote $GIT_URL$folder.git $GIT_BRANCH | awk '{ print $1}')
-    echo $hash
-    line="git \"$GIT_URL$folder.git\" \"$hash\""
+qmobiles=$(cat "Cartfile" | grep "QMobile" | sed 's/ "HEAD"//g'| sed 's/github //g'| sed 's/"//g')
 
-    echo "$line" >> "$file"
+for repo in $qmobiles; do
+  hash=`git ls-remote https://github.com/$repo.git $GIT_BRANCH | awk '{ print $1}'`
+  if [[ -z "$hash" ]]; then
+    hash="HEAD" # restore head to avoid empty pinned version
+  fi
+  line="github \"$repo.git\" \"$hash\""
+  echo "$line" >> "$file"
 done
 echo "- after:"
 cat $file
