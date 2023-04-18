@@ -8,10 +8,23 @@ CARTHAGE_CHECKOUT_OPTIONS=""
 CARTHAGE_BUILD_OPTIONS="--cache-builds --no-use-binaries"
 CARTHAGE_PLATFORM="iOS"
 CARTHAGE_LOG_PATH="build.log"
+if [[ -z "$SIGN_CERTIFICATE" ]]; then
+  SIGN_CERTIFICATE="Developer ID Application"
+fi
 
 CARTHAGE_REMOVE_CACHE=0
 ROME_USE=0
 XPROJ_UP_USE=1 # mandatory now because of project that import iOS 8
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+cd $SCRIPT_DIR # work only if in script dir
+
+if [[ -z "$(which carthage)" ]]; then
+  >&2 echo "❌ You must install carthage:"
+  >&2 echo "> brew upgrade carthage"
+  exit 2
+fi
 
 # Remove cache
 if [ "$CARTHAGE_REMOVE_CACHE" -eq 1 ]; then
@@ -45,21 +58,36 @@ echo "- after:"
 cat $file
 
 if [[ "$ROME_USE" -eq 1 ]]; then
+  if [[ -z "$(which rome)" ]]; then
+    >&2 echo "❌ You must install rome if ROME_USE=$ROME_USE"
+    exit 2
+  fi
   echo "➡️ Rome download (cache with rome)"
   rome download --platform $CARTHAGE_PLATFORM
 fi
 
+echo ""
 echo "➡️ Carthage checkout"
 carthage checkout $CARTHAGE_CHECKOUT_OPTIONS
 
 if [[ "$XPROJ_UP_USE" -eq 1 ]]; then
+  echo ""
   echo "⬆️ Upgrade Xcode projects"
+  if [[ -z "$(which xprojup)" ]]; then
+    >&2 echo "❌ You must install xprojup:"
+    >&2 echo "> sudo curl -sL https://phimage.github.io/xprojup/install.sh | bash"
+    exit 2
+  fi 
   xprojup --recursive Carthage/Checkouts # for project with target iOS 8.0 it could help to build
+else
+  >&2 echo "You must let activated prj upgrade because of some project lke XCGLogger"
+  exit 1
 fi
 
+echo ""
 echo "➡️ Carthage fix Cartfile"
 # Remove Reactivate extension from Moya
-echo "Remove Reactivate extension from Moya"
+echo " Remove Reactivate extension from Moya"
 
 ## Sources
 rm -Rf Carthage/Checkouts/Reactive*
@@ -91,7 +119,7 @@ sed -i '' '/Rx/d' Carthage/Checkouts/Moya/Cartfile
 sed -i.bak 's/4.7.3/4.8.0/' Carthage/Checkouts/Moya/Cartfile.resolved
 
 # # # # # # # # # # # # # # 
-echo "Remove xcworkspace of QMobile to use project."
+echo " Remove xcworkspace of QMobile to use project."
 
 cd Carthage/Checkouts
 for folder in *; do
@@ -108,6 +136,7 @@ for folder in *; do
 done
 cd ../../ # replace by a cd root
 
+echo ""
 echo "➡️ Carthage build"
 echo "carthage build $CARTHAGE_BUILD_OPTIONS --platform $CARTHAGE_PLATFORM --log-path '$CARTHAGE_LOG_PATH'"
 ./carthage.sh build $CARTHAGE_BUILD_OPTIONS --platform $CARTHAGE_PLATFORM --log-path "$CARTHAGE_LOG_PATH"
@@ -129,43 +158,37 @@ if [[ "$ROME_USE" -eq 1 ]]; then
   rome upload --platform $CARTHAGE_PLATFORM
 fi
 
-# remove useless files
-rm -Rf Carthage/Checkouts/ZIPFoundation/Tests/ZIPFoundationTests/Resources
+echo ""
+"$SCRIPT_DIR/sdklicenses.sh"
 
-## demo
-rm -Rf Carthage/Checkouts/IBAnimatable/IBAnimatableApp
-rm -Rf Carthage/Checkouts/Kingfisher/Demo
-rm -Rf Carthage/Checkouts/SwiftMessages/Demo
-rm -Rf Carthage/Checkouts/XCGLogger/DemoApps
-rm -Rf Carthage/Checkouts/Eureka/Example
-rm -Rf Carthage/Checkouts/DeviceKit/Example
-rm -Rf Carthage/Checkouts/Alamofire/Example
-rm -Rf Carthage/Checkouts/SwiftyJSON/Example
-rm -Rf Carthage/Checkouts/Prephirences/Example
-rm -Rf Carthage/Checkouts/Moya/Examples
-rm -Rf Carthage/Checkouts/CallbackURLKit/SampleApp
-rm -Rf Carthage/Checkouts/SwiftMessages/iMessageDemo
+if [[ "$code" -eq 0 ]]; then
+  # remove useless things
+  echo ""
+  "$SCRIPT_DIR/sdkclean.sh"
+  "$SCRIPT_DIR/sdkstriparch.sh"
 
-## docs
-rm -Rf Carthage/Checkouts/Guitar/docs
-rm -Rf Carthage/Checkouts/Kingfisher/docs
-rm -Rf Carthage/Checkouts/IBAnimatable/Documentation
-rm -Rf Carthage/Checkouts/Alamofire/Documentation
-rm -Rf Carthage/Checkouts/Alamofire/docs
-rm -Rf Carthage/Checkouts/Moya/docs
-rm -Rf Carthage/Checkouts/Moya/docs_CN
-rm -Rf Carthage/Checkouts/Eureka/Documentation
-rm -Rf Carthage/Checkouts/BrightFutures/Documentation
+  # sign if possible
+  if [[ "$SIGN_CERTIFICATE" != "-" ]]; then
+    echo ""
+    security find-certificate -c "$SIGN_CERTIFICATE" >/dev/null 2>&1
+    certificate_exists=$?
 
-## resources
-rm -Rf Carthage/Checkouts/SwiftMessages/Design
-rm -Rf Carthage/Checkouts/Moya/Tests/testImage.png
-rm -Rf Carthage/Checkouts/Kingfisher/images
-rm -Rf Carthage/Checkouts/Eureka/*.png
-rm -Rf Carthage/Checkouts/Eureka/*.jpg
-rm -Rf Carthage/Checkouts/Moya/web
-rm -Rf Carthage/Checkouts/XCGLogger/ReadMeImages
-rm -Rf Carthage/Checkouts/Prephirences/Xcodes/Mac/*.gif
+    if [[ $certificate_exists -eq 0 ]]; then
+      "$SCRIPT_DIR/sdksign.sh" "$SIGN_CERTIFICATE"
+    else
+      echo "⚠️  no signature done, signing certificate not found '$SIGN_CERTIFICATE'. You could configure SIGN_CERTIFICATE env variable (set to - to deactivate)"
+    fi
+  fi
+fi
 
+echo ""
+if [[ "$code" -eq 0 ]]; then
+  echo "✅ Build succeed"
+
+  version="<4d version>"
+  echo "💡 You could know replace Carthage folder in /Library/Caches/com.4D.mobile/sdk/$version/iOS/sdk/ or in your generated app"
+else
+  >&2 echo "❌ Build failed"
+fi
 # exist with build result
 exit $code

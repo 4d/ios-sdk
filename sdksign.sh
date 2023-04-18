@@ -1,12 +1,23 @@
+#!/bin/bash
+
 nameCertificat=$1
 Entitlements=$2
 frameworks_folder=$3
+
+# fill with default values
+if [ -z "$nameCertificat" ]; then
+	nameCertificat="Developer ID Application"
+fi
+
+if [ -z "$Entitlements" ]; then
+	Entitlements="SDK.entitlements"
+fi
+
 if [ -z "$frameworks_folder" ]; then
 	frameworks_folder="Carthage/Build/iOS"
 fi
 signApp=./SignApp.sh
 
-# echo "strip arch "$arch
 for framework in $frameworks_folder/*
 do
     if [[ -d $framework ]]; then

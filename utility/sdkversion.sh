@@ -1,3 +1,4 @@
+#!/bin/bash
 
 function parse_git_dirty() {
   git diff --quiet --ignore-submodules HEAD 2>/dev/null; [ $? -eq 1 ] && echo "*"
@@ -13,8 +14,6 @@ function parse_git_hash() {
   git rev-parse --short HEAD 2> /dev/null | sed "s/\(.*\)/@\1/"
 }
 bnumber=55
-
-cd /Users/emarchand/QMobile/CocoaPods
 
 # DEMO
 GIT_BRANCH=$(parse_git_branch)$(parse_git_hash)

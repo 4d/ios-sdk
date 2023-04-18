@@ -1,9 +1,13 @@
+#!/bin/bash   
 
+# remove useless archs i386 armv7
 
 frameworks_folder=Carthage/Build/iOS
 archs="i386 armv7"
 apples="apple-ios-simulator apple-ios"
 swiftmodules="swiftdoc swiftmodule"
+
+echo "🗑️ Removing useless architectures $archs"
 
 for arch in $archs
 do

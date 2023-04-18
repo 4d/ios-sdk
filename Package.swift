@@ -11,45 +11,19 @@ let package = Package(
         .iOS(.v14)
     ],
     dependencies: [
-        .package(url: "https://gitlab-4d.private.4d.fr/4d/qmobile/ios/QMobileAPI.git" , .revision("HEAD")),
-        .package(url: "https://gitlab-4d.private.4d.fr/4d/qmobile/ios/QMobileDataStore.git" , .revision("HEAD")),
-        .package(url: "https://gitlab-4d.private.4d.fr/4d/qmobile/ios/QMobileDataSync.git" , .revision("HEAD")),
-        .package(url: "https://gitlab-4d.private.4d.fr/4d/qmobile/ios/QMobileUI.git" , .revision("HEAD")),
-        /*.package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.6.4"),
-        .package(url: "https://github.com/DaveWoodCom/XCGLogger.git", from: "7.0.0"),
-        .package(url: "https://github.com/Moya/Moya.git", from: "15.0.3"),
-        .package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", from: "5.0.0"),
-        .package(url: "https://github.com/weichsel/ZIPFoundation.git", from: "0.9.9"),
-        .package(url: "https://github.com/nvzqz/FileKit.git", from: "6.1.0"),
-        .package(url: "https://github.com/phimage/CallbackURLKit.git", .revision("HEAD")),
-        .package(url: "https://github.com/phimage/Prephirences.git", from: "5.4.0"),
-        .package(url: "https://github.com/onevcat/Kingfisher.git", from: "5.13.4")
-        .package(url: "https://github.com/phimage/ValueTransformerKit.git" , from: "1.2.3")
-//        .package(url: "https://github.com/SwiftKickMobile/SwiftMessages.git", from: "7.0.0"), // No Package.swift file
-        .package(url: "https://github.com/phimage/SwiftMessages.git", .revision("HEAD")), // https://github.com/SwiftKickMobile/SwiftMessages/pull/297
-        .package(url: "https://github.com/xmartlabs/Eureka.git", from: "5.3.2"),
-        .package(url: "https://github.com/thebluepotato/Eureka.git", .branch("spm")), // https://github.com/xmartlabs/Eureka/pull/1877
-        .package(url: "https://github.com/IBAnimatable/IBAnimatable.git", .revision("HEAD"))
-*/
+        .package(url: "https://github.com/4d/ios-QMobileAPI.git" , .revision("HEAD")),
+        .package(url: "https://github.com/4d/ios-QMobileDataStore.git" , .revision("HEAD")),
+        .package(url: "https://github.com/4d/ios-QMobileDataSync.git" , .revision("HEAD")),
+        .package(url: "https://github.com/4d/ios-QMobileUI.git" , .revision("HEAD"))
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "SDK",
             dependencies: [
                 "QMobileAPI",
                 "QMobileDataStore",
                 "QMobileDataSync",
-                "QMobileUI"/*,
-                "Alamofire",
-                "XCGLogger",
-                "Moya",
-                "SwiftyJSON",
-                "ZIPFoundation",
-                "FileKit",
-                "CallbackURLKit",
-                "Prephirences"*/
+                "QMobileUI"
             ],
             path: "Sources"),
         .testTarget(
