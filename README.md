@@ -70,7 +70,7 @@ By default the iOS SDK must be installed into: `/Library/Caches/com.4D.mobile/sd
 |-|-|-|
 | [Alamofire](https://github.com/Alamofire/Alamofire ) | [MIT](https://github.com/Alamofire/Alamofire/blob/master/LICENSE) | Network layer |
 | [Moya](https://github.com/Moya/Moya) | [MIT](https://github.com/Moya/Moya/blob/master/License.md) | API abstraction layer |
-| [MKingfisher](https://github.com/onevcat/Kingfisher ) | [MIT](https://github.com/onevcat/Kingfisher/blob/master/LICENSE) | Download remote image and cache |
+| [Kingfisher](https://github.com/onevcat/Kingfisher ) | [MIT](https://github.com/onevcat/Kingfisher/blob/master/LICENSE) | Download remote image and cache |
 | [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON ) | [MIT](https://github.com/SwiftyJSON/SwiftyJSON/blob/master/LICENSE) | Decode/Encode JSON |
 
 ### UI
