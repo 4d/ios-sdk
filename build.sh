@@ -22,7 +22,7 @@ cd $SCRIPT_DIR # work only if in script dir
 
 if [[ -z "$(which carthage)" ]]; then
   >&2 echo "❌ You must install carthage:"
-  >&2 echo "> brew upgrade carthage"
+  >&2 echo "> brew install carthage"
   exit 2
 fi
 
