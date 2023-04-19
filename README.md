@@ -8,7 +8,7 @@ To build iOS SDK some tools to be installed:
 
 - [Xcode](https://apps.apple.com/fr/app/xcode/id497799835?mt=12)
 - [Carthage](https://github.com/Carthage/Carthage/issues/1194)
-  - could be installed with [brew](https://brew.sh/) `brew upgrade carthage`
+  - could be installed with [brew](https://brew.sh/) `brew install carthage`
 - [xprojup](https://github.com/phimage/xprojup) to upgrade third party projects
   - `sudo curl -sL https://phimage.github.io/xprojup/install.sh | bash`
 
@@ -95,6 +95,6 @@ By default the iOS SDK must be installed into: `/Library/Caches/com.4D.mobile/sd
 
 | Name | License | Usefulness |
 |-|-|-|
-| [AnimatedCollectionViewLayout](https://github.com/KelvinJin/AnimatedCollectionViewLayout) | "[MIT](https://github.com/KelvinJin/AnimatedCollectionViewLayout/blob/master/LICENSE) | template (not in SDK) |
+| [AnimatedCollectionViewLayout](https://github.com/KelvinJin/AnimatedCollectionViewLayout) | [MIT](https://github.com/KelvinJin/AnimatedCollectionViewLayout/blob/master/LICENSE) | template (not in SDK) |
 | [mosaic-layout]( https://github.com/vinnyoodles/mosaic-layout) | [MIT](https://github.com/vinnyoodles/mosaic-layout/blob/master/LICENSE) | template (not in SDK) |
 
