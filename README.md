@@ -56,7 +56,19 @@ By default the iOS SDK must be installed into: `/Library/Caches/com.4D.mobile/sd
 - `Romefile` for `rome` to define cache path
 - `Package.swift` for swift package manager to define list of swift projects.
 
-## 3rd parties
+
+## SDK frameworks
+
+### SDK ones (ie. QMobile)
+
+| Name | License | Usefulness |
+|-|-|-|
+| [QMobileAPI](https://github.com/4d/ios-QMobileAPI) | [4D](https://github.com/4d/ios-QMobileAPI/blob/master/LICENSE.md) | Network api |
+| [QMobileDataStore](https://github.com/4d/ios-QMobileDataStore) | [4D](https://github.com/4d/ios-QMobileDataStore/blob/master/LICENSE.md) | Store data |
+| [QMobileDataSync](https://github.com/4d/ios-QMobileDataSync) | [4D](https://github.com/4d/ios-QMobileDataSync/blob/master/LICENSE.md) | Synchronize data |
+| [QMobileUI](https://github.com/4d/ios-QMobileUI) | [4D](https://github.com/4d/ios-QMobileUI/blob/master/LICENSE.md) | Graphic, Application, Features |
+
+### 3rd parties
 
 | Name | License | Usefulness |
 |-|-|-|
@@ -64,7 +76,7 @@ By default the iOS SDK must be installed into: `/Library/Caches/com.4D.mobile/sd
 | [XCGLogger](https://github.com/DaveWoodCom/XCGLogger) | [MIT](https://github.com/DaveWoodCom/XCGLogger/blob/master/LICENSE) | Log | 
 | [FileKit](https://github.com/nvzqz/FileKit) | [MIT](https://github.com/nvzqz/FileKit/blob/master/LICENSE.md) | Files |
 
-### Network/API
+#### Network/API
 
 | Name | License | Usefulness |
 |-|-|-|
@@ -73,7 +85,7 @@ By default the iOS SDK must be installed into: `/Library/Caches/com.4D.mobile/sd
 | [Kingfisher](https://github.com/onevcat/Kingfisher ) | [MIT](https://github.com/onevcat/Kingfisher/blob/master/LICENSE) | Download remote image and cache |
 | [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON ) | [MIT](https://github.com/SwiftyJSON/SwiftyJSON/blob/master/LICENSE) | Decode/Encode JSON |
 
-### UI
+#### UI
 
 | Name | License | Usefulness |
 |-|-|-|
@@ -82,16 +94,16 @@ By default the iOS SDK must be installed into: `/Library/Caches/com.4D.mobile/sd
 | [ValueTransformerKit](https://github.com/phimage/ValueTransformerKit) | [MIT](https://github.com/phimage/ValueTransformerKit/blob/master/LICENSE) | Binding: transform data | 
 | [Eureka](https://github.com/xmartlabs/Eureka ) | [MIT](https://github.com/xmartlabs/Eureka/blob/master/LICENSE) | Show form for action |
 
-### Others
+#### Others
 
-#### Testing
+##### Testing
 
 | Name | License | Usefulness |
 |-|-|-|
 | [CallbackURLKit](https://github.com/phimage/CallbackURLKit ) | [MIT](https://github.com/phimage/CallbackURLKit/blob/master/LICENSE) | x-callback-url protocol | 
 | [MomXML](https://github.com/phimage/MomXML) | [MIT](https://github.com/phimage/MomXML/blob/master/LICENSE) | Play with core data model |
 
-#### Templates 3rd parties
+##### Templates 3rd parties
 
 | Name | License | Usefulness |
 |-|-|-|
