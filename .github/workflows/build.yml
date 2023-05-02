@@ -1,0 +1,15 @@
+name: build
+
+on: workflow_dispatch
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: xprojup install
+      run: curl -sL https://phimage.github.io/xprojup/install.sh | bash
+    - name: carthage
+      run: ./build.sh
