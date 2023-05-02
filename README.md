@@ -31,13 +31,17 @@ Not mandatory but helpful
 
 ## Deploy
 
-Copy content of project into cache folder.
+The SDK used by "4D Mobile App" will be copyed by project from cache folder.
 
 By default the iOS SDK must be installed into: `/Library/Caches/com.4D.mobile/sdk/<version>/iOS/sdk`
 
 - with `version`, the 4d version represented as 4 digits (for instance v20=2000 , v20R2=2020)
 
+If no SDK found it will be downloaded from latest release of this project
 
+You could also put an archive "ios.zip" inside 
+- mobile component "4D Mobile App/Resources/sdk/"
+- or inside "YourBase/Resources/mobile/sdk/"
 
 ## Info about files in this project
 
