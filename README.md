@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-First be on macOS, iOS native development is only possible on this openrating system.
+First be on macOS, iOS native development is only possible on this operating system.
 
 To build iOS SDK some tools to be installed:
 
@@ -31,11 +31,11 @@ Not mandatory but helpful
 
 ## Deploy
 
-The SDK used by "4D Mobile App" will be copyed by project from cache folder.
+The SDK used by "4D Mobile App" will be copied by project from cache folder.
 
 By default the iOS SDK must be installed into: `/Library/Caches/com.4D.mobile/sdk/<version>/iOS/sdk`
 
-- with `version`, the 4d version represented as 4 digits (for instance v20=2000 , v20R2=2020)
+- with `<version>`: the 4d version represented as 4 digits (for instance v20=2000 , v20R2=2020)
 
 If no SDK found it will be downloaded from latest release of this project
 
