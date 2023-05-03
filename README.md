@@ -1,5 +1,7 @@
 # SDK
 
+This project allow to download and build all dependencies needed by the iOS SDK. It use mainly [Carthage](https://github.com/Carthage/Carthage/) package manager for that.
+
 ## Prerequisites
 
 First be on macOS, iOS native development is only possible on this operating system.
@@ -7,7 +9,7 @@ First be on macOS, iOS native development is only possible on this operating sys
 To build iOS SDK some tools to be installed:
 
 - [Xcode](https://apps.apple.com/fr/app/xcode/id497799835?mt=12) : version defined by [xcode.json](https://github.com/4d-go-mobile/sdk/edit/master/xcode.json)
-- [Carthage](https://github.com/Carthage/Carthage/issues/1194)
+- [Carthage](https://github.com/Carthage/Carthage/)
   - could be installed with [brew](https://brew.sh/) `brew install carthage`
 - [xprojup](https://github.com/phimage/xprojup) to upgrade third party projects
   - `sudo curl -sL https://phimage.github.io/xprojup/install.sh | bash`
@@ -20,6 +22,8 @@ Not mandatory but helpful
 ## Build
 
 ### with Carthage
+
+To build with carthage simply use the provided script. (more detail bellow)
 
 ```bash
 ./build.sh
