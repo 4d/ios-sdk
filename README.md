@@ -6,7 +6,7 @@ This project allow to download and build all dependencies needed by the iOS SDK.
 
 First be on macOS, iOS native development is only possible on this operating system.
 
-To build iOS SDK some tools to be installed:
+To build iOS SDK some tools need to be installed:
 
 - [Xcode](https://apps.apple.com/fr/app/xcode/id497799835?mt=12) : version defined by [xcode.json](https://github.com/4d-go-mobile/sdk/edit/master/xcode.json)
 - [Carthage](https://github.com/Carthage/Carthage/)
