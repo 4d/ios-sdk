@@ -76,6 +76,13 @@ You could also put an archive "ios.zip" inside
 | [QMobileDataSync](https://github.com/4d/ios-QMobileDataSync) | [4D](https://github.com/4d/ios-QMobileDataSync/blob/master/LICENSE.md) | Synchronize data |
 | [QMobileUI](https://github.com/4d/ios-QMobileUI) | [4D](https://github.com/4d/ios-QMobileUI/blob/master/LICENSE.md) | Graphic, Application, Features |
 
+```mermaid
+flowchart TD
+QMobileUI --> QMobuleDataSync
+QMobuleDataSync --> QMobuleDataStore
+QMobuleDataSync --> QMobileAPI
+```
+
 ### 3rd parties
 
 | Name | License | Usefulness |
