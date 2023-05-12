@@ -5,4 +5,4 @@ if [[ -z "$name" ]]; then
   name="ios"
 fi
 
-zip $name Carthage/Build Cartfile.resolved LICENSES.md Carthage/Checkouts/IBAnimatable
+zip -r $name Carthage/Build Cartfile.resolved LICENSES.md Carthage/Checkouts/IBAnimatable
