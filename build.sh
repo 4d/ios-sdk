@@ -117,20 +117,17 @@ sed -i.bak 's/4.7.3/4.8.0/' Carthage/Checkouts/Moya/Cartfile.resolved
 # # # # # # # # # # # # # # 
 echo " Remove xcworkspace of QMobile to use project."
 
-cd Carthage/Checkouts
-for folder in $modules; do
-  if [[ -d $folder ]]; then
-    if [[ $folder == QMobile* ]]; then
-      echo "$folder: "
-      # remove workspace if project exist (avoid compile dependencies and have some umbrella issues)
-      if [[ -d $folder/$folder.xcworkspace ]]; then
-        echo "- remove xcworkspace"
-        rm -Rf $folder/$folder.xcworkspace
-      fi
-    fi
+cd "$SCRIPT_DIR/Carthage/Checkouts"
+for repo in $qmobiles; do
+  repo=${repo#*-}
+  echo "$repo: "
+  # remove workspace if project exist (avoid compile dependencies and have some umbrella issues)
+  if [[ -d "ios-$repo/$repo.xcworkspace" ]]; then
+    echo "- remove xcworkspace"
+    rm -Rf "ios-$repo/$repo.xcworkspace"
   fi
 done
-cd ../../ # replace by a cd root
+cd "$SCRIPT_DIR"
 
 echo ""
 echo "➡️ Carthage build"
