@@ -18,7 +18,7 @@ XPROJ_UP_USE=1 # mandatory now because of project that import iOS 8
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-cd $SCRIPT_DIR # work only if in script dir
+cd "$SCRIPT_DIR" # work only if in script dir
 
 if [[ -z "$(which carthage)" ]]; then
   >&2 echo "❌ You must install carthage:"
@@ -41,18 +41,14 @@ cat $file
 # remove QMobile from file
 sed -i '' '/QMobile/d' $file
 
-for folder in *; do
-    if [[ -d $folder ]]; then
-      if [[ $folder == QMobile* ]]; then
-          #hash=`git -C $f rev-parse HEAD`
-          echo $folder
-          hash=`git ls-remote $GIT_URL$folder.git $GIT_BRANCH | awk '{ print $1}'`
-          echo $hash
-          line="git \"$GIT_URL$folder.git\" \"$hash\""
+modules="QMobileAPI QMobileDataStore" # QMobileDataSync QMobileUI"
+for folder in $modules; do
+    echo $folder
+    hash=$(git ls-remote $GIT_URL$folder.git $GIT_BRANCH | awk '{ print $1}')
+    echo $hash
+    line="git \"$GIT_URL$folder.git\" \"$hash\""
 
-          echo "$line" >> "$file"
-      fi
-    fi
+    echo "$line" >> "$file"
 done
 echo "- after:"
 cat $file
@@ -122,7 +118,7 @@ sed -i.bak 's/4.7.3/4.8.0/' Carthage/Checkouts/Moya/Cartfile.resolved
 echo " Remove xcworkspace of QMobile to use project."
 
 cd Carthage/Checkouts
-for folder in *; do
+for folder in $modules; do
   if [[ -d $folder ]]; then
     if [[ $folder == QMobile* ]]; then
       echo "$folder: "
