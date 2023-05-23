@@ -88,6 +88,9 @@ func run(arguments: [String]) throws {
         if !url.pathComponents.filter({ $0 == "Pods" }).isEmpty || !url.pathComponents.filter({ $0 == "Tests" }).isEmpty {
             return false
         }
+        if url.pathExtension == "swift" {
+            return false
+        }
         return url.lastPathComponent.range(of: "LICENSE") != nil || url.lastPathComponent.range(of: "LICENCE") != nil || url.lastPathComponent.range(of: "License") != nil
     }
 
