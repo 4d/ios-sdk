@@ -1,7 +1,12 @@
 #!/bin/bash   
 
-#GIT_BRANCH="main"
-GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+inside_git_repo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
+if [ "$inside_git_repo" ]; then
+  GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+else
+  GIT_BRANCH="main"
+  >&2 echo "❌ You are not in git repository, git branch "$GIT_BRANCH" will be used"
+fi
 
 CARTHAGE_CHECKOUT_OPTIONS=""
 CARTHAGE_BUILD_OPTIONS="--cache-builds --no-use-binaries"
