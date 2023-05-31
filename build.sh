@@ -183,8 +183,8 @@ echo ""
 if [[ "$code" -eq 0 ]]; then
   echo "✅ Build succeed"
 
-  version="<4d version>"
-  echo "💡 You could know replace Carthage folder in /Library/Caches/com.4D.mobile/sdk/$version/iOS/sdk/ or in your generated app"
+  echo "💡 You could now replace 'Carthage' folder in your generated app"
+  echo "📦 or create an archive ios.zip using script ./sdkarchive.sh"
 else
   >&2 echo "❌ Build failed"
 fi
