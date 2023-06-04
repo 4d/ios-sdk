@@ -1,0 +1,36 @@
+name: 🚀 release
+on: 
+  release:
+    types: [published]
+jobs:
+  publish:
+    name: Publish
+    runs-on: macos-latest
+    env:
+      RELEASE_REPO: "https://raw.githubusercontent.com/4d-go-mobile/check-workflow/master/form/scripts"
+    steps:
+      - name: ⬇️ Checkout
+        uses: actions/checkout@master
+      - name: Build
+        run: |
+          ./build.sh
+      - name: 📦 Archive
+        run: |
+          ./sdkarchive.sh
+      - name: ⬆️ Upload to Release
+        run: |
+          ARTIFACT=./ios.zip
+          REPOSITORY_NAME=$(jq --raw-output '.repository.name' $GITHUB_EVENT_PATH)
+          AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
+          CONTENT_LENGTH_HEADER="Content-Length: $(stat -f%z "$ARTIFACT")"
+          CONTENT_TYPE_HEADER="Content-Type: application/zip"
+          RELEASE_ID=$(jq --raw-output '.release.id' $GITHUB_EVENT_PATH)
+          FILENAME=$(basename $ARTIFACT)
+          UPLOAD_URL="https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=$FILENAME"
+
+          echo "$UPLOAD_URL"
+          curl -sSL -XPOST \
+            -H "$AUTH_HEADER" -H "$CONTENT_LENGTH_HEADER" -H "$CONTENT_TYPE_HEADER" \
+            --upload-file "$ARTIFACT" "$UPLOAD_URL"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
