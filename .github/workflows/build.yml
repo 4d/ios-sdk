@@ -9,6 +9,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: xcode info
+      run: xcodebuild -version
     - name: xprojup install
       run: curl -sL https://phimage.github.io/xprojup/install.sh | bash
     - name: carthage
