@@ -5,4 +5,7 @@ if [[ -z "$name" ]]; then
   name="ios"
 fi
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd "$SCRIPT_DIR"
+
 zip -r $name Carthage/Build Cartfile.resolved LICENSES.md Carthage/Checkouts/IBAnimatable
