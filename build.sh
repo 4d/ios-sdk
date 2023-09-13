@@ -159,6 +159,9 @@ fi
 echo ""
 "$SCRIPT_DIR/sdklicenses.sh"
 
+echo ""
+"$SCRIPT_DIR/sdkversion.sh"
+
 if [[ "$code" -eq 0 ]]; then
   # remove useless things
   echo ""
