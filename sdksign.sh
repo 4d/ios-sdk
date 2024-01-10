@@ -20,21 +20,23 @@ signApp=./SignApp.sh
 
 for framework in $frameworks_folder/*
 do
-    if [[ -d $framework ]]; then
-      filename=$(basename "$framework")
-      name="${filename%.*}"
-      extension="${framework##*.}"
+  if [[ -d $framework ]]; then
+    filename=$(basename "$framework")
+    name="${filename%.*}"
+    extension="${framework##*.}"
 
-      if [[ $extension = "framework" ]]; then
-	    # Sign symbol
-        file_path=$framework".dSYM/Contents/Resources/DWARF/$name"
-        if [ -f "$file_path" ]; then
-           $signApp "$nameCertificat" "$file_path" "$Entitlements"
-        fi
-        
-	    # Sign framework
-        file_path="$framework"
-        $signApp "$nameCertificat" "$file_path" "$Entitlements"
+    if [[ $extension = "framework" ]]; then
+      echo "📦 $name"
+      # Sign symbol
+      file_path=$framework".dSYM/Contents/Resources/DWARF/$name"
+      if [ -f "$file_path" ]; then
+          $signApp "$nameCertificat" "$file_path" "$Entitlements"
+      fi
+      
+      # Sign framework
+      file_path="$framework"
+      $signApp "$nameCertificat" "$file_path" "$Entitlements"
+      echo ""
     fi
   fi
 done
