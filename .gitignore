@@ -3,3 +3,4 @@ build.log
 sign_output.txt
 ios.zip
 sdkVersion
+xcodeVersion

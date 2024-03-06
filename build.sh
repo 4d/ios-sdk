@@ -182,6 +182,8 @@ if [[ "$code" -eq 0 ]]; then
   fi
 fi
 
+/usr/bin/xcodebuild -version > xcodeVersion
+
 echo ""
 if [[ "$code" -eq 0 ]]; then
   echo "✅ Build succeed"
