@@ -16,6 +16,14 @@ jobs:
         carthage version
         which carthage
         lipo -archs $(which carthage)
+    - name: carthage older install
+      run: arch -x86_64 /usr/local/bin/brew install carthage
+    - name: carthage info  after install
+      run: |
+        carthage version
+        which carthage
+        lipo -archs $(which carthage)
+    - name: older
     - name: xprojup install
       run: curl -sL https://phimage.github.io/xprojup/install.sh | bash
     - name: setup rosetta
