@@ -29,4 +29,4 @@ fi
 export XCODE_XCCONFIG_FILE="$xcconfig"
 cat $XCODE_XCCONFIG_FILE
 
-carthage "$@" 
+arch -x86_64 carthage "$@" 
