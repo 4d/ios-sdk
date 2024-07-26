@@ -12,7 +12,7 @@ jobs:
     - name: xcode info
       run: xcodebuild -version
     - name: carthage
-      run: arch -x86_64 $(which brew) install carthage
+      run: arch -x86_64 $(which brew) reinstall carthage
     - name: carthage info
       run: |
         carthage version
