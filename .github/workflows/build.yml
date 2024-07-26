@@ -11,14 +11,9 @@ jobs:
     - uses: actions/checkout@v3
     - name: xcode info
       run: xcodebuild -version
-    - name: carthage info
-      run: |
-        carthage version
-        which carthage
-        lipo -archs $(which carthage)
-    - name: carthage older install
+    - name: carthage
       run: arch -x86_64 /usr/local/bin/brew install carthage
-    - name: carthage info  after install
+    - name: carthage info
       run: |
         carthage version
         which carthage
