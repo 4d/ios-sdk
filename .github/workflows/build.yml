@@ -13,5 +13,7 @@ jobs:
       run: xcodebuild -version
     - name: xprojup install
       run: curl -sL https://phimage.github.io/xprojup/install.sh | bash
+    - name: setup rosetta
+      run: /usr/sbin/softwareupdate --install-rosetta --agree-to-license
     - name: carthage
       run: ./build.sh
