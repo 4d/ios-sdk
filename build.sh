@@ -8,12 +8,34 @@ else
   >&2 echo "❌ You are not in git repository, git branch "$GIT_BRANCH" will be used"
 fi
 
+if [[ -z "${USE_XCFRAMEWORKS}" ]]; then
+  echo "no USE_XCFRAMEWORKS. try to check if we could do without ie. have a x86_64 carthage"
+
+  if [[ $(file $(which carthage) | grep "x86_64" | wc -l) -eq 1 ]]; then
+    echo "💡 carthage is x86_64. framework could be build in legacy way."
+    USE_XCFRAMEWORKS=0
+  else
+    >&2 echo "❌ You have no x86_64 carthage installed. we could not build std 'framework'. We will build 'xcframework' instead."
+    USE_XCFRAMEWORKS=1
+  fi
+  USE_XCFRAMEWORKS=0
+fi
+
 CARTHAGE_CHECKOUT_OPTIONS=""
 CARTHAGE_BUILD_OPTIONS="--cache-builds --no-use-binaries"
+if [ "$USE_XCFRAMEWORKS" -eq 1 ]; then
+  CARTHAGE_BUILD_OPTIONS="$CARTHAGE_BUILD_OPTIONS --use-xcframeworks"
+  >&2 echo "⚠ xcframeworks activated. Maybe not yet compatible with 4D mobile app build. But you could edit an xcode project and integrate it"
+  >&2 echo ""
+fi
 CARTHAGE_PLATFORM="iOS"
 CARTHAGE_LOG_PATH="build.log"
 if [[ -z "$SIGN_CERTIFICATE" ]]; then
   SIGN_CERTIFICATE="Developer ID Application"
+fi
+
+if [ "$USE_XCFRAMEWORKS" -eq 1 ]; then
+  rm -Rf Carthage/Build/$CARTHAGE_PLATFORM
 fi
 
 CARTHAGE_REMOVE_CACHE=0
@@ -137,7 +159,11 @@ cd "$SCRIPT_DIR"
 echo ""
 echo "➡️ Carthage build"
 echo "carthage build $CARTHAGE_BUILD_OPTIONS --platform $CARTHAGE_PLATFORM --log-path '$CARTHAGE_LOG_PATH'"
-./carthage.sh build $CARTHAGE_BUILD_OPTIONS --platform $CARTHAGE_PLATFORM --log-path "$CARTHAGE_LOG_PATH"
+if [ "$USE_XCFRAMEWORKS" -eq 1 ]; then
+  carthage build $CARTHAGE_BUILD_OPTIONS --platform $CARTHAGE_PLATFORM --log-path "$CARTHAGE_LOG_PATH"
+else
+  ./carthage.sh build $CARTHAGE_BUILD_OPTIONS --platform $CARTHAGE_PLATFORM --log-path "$CARTHAGE_LOG_PATH"
+fi
 code=$? # or maybe log in other script
 
 if [ -f "$CARTHAGE_LOG_PATH" ]; then
@@ -166,7 +192,9 @@ if [[ "$code" -eq 0 ]]; then
   # remove useless things
   echo ""
   "$SCRIPT_DIR/sdkclean.sh"
-  "$SCRIPT_DIR/sdkstriparch.sh"
+  if [ "$USE_XCFRAMEWORKS" -ne 1 ]; then
+    "$SCRIPT_DIR/sdkstriparch.sh"
+  fi
 
   # sign if possible
   if [[ "$SIGN_CERTIFICATE" != "-" ]]; then
@@ -189,6 +217,10 @@ if [[ "$code" -eq 0 ]]; then
   echo "✅ Build succeed"
 
   echo "💡 You could now replace 'Carthage' folder in your generated app"
+  if [ "$USE_XCFRAMEWORKS" -eq 1 ]; then
+    >&2 echo "⚠ and modify your project, by removing all framework and replace it by xcframework (if 4d mobile app do not do it yet)"
+    >&2 echo ""
+  fi
   echo "📦 or create an archive ios.zip using script ./sdkarchive.sh"
 else
   >&2 echo "❌ Build failed"
