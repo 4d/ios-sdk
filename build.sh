@@ -13,13 +13,14 @@ if [[ -z "${USE_XCFRAMEWORKS}" ]]; then
 
   if [[ $(file $(which carthage) | grep "x86_64" | wc -l) -eq 1 ]]; then
     echo "💡 carthage is x86_64. framework could be build in legacy way."
-    USE_XCFRAMEWORKS=0
+    export USE_XCFRAMEWORKS=0
   else
     >&2 echo "❌ You have no x86_64 carthage installed. we could not build std 'framework'. We will build 'xcframework' instead."
-    USE_XCFRAMEWORKS=1
+    export USE_XCFRAMEWORKS=1
   fi
-  USE_XCFRAMEWORKS=0
+  export USE_XCFRAMEWORKS=0
 fi
+echo "USE_XCFRAMEWORKS=$USE_XCFRAMEWORKS"
 
 CARTHAGE_CHECKOUT_OPTIONS=""
 CARTHAGE_BUILD_OPTIONS="--cache-builds --no-use-binaries"
@@ -158,10 +159,11 @@ cd "$SCRIPT_DIR"
 
 echo ""
 echo "➡️ Carthage build"
-echo "carthage build $CARTHAGE_BUILD_OPTIONS --platform $CARTHAGE_PLATFORM --log-path '$CARTHAGE_LOG_PATH'"
 if [ "$USE_XCFRAMEWORKS" -eq 1 ]; then
+  echo "carthage build $CARTHAGE_BUILD_OPTIONS --platform $CARTHAGE_PLATFORM --log-path '$CARTHAGE_LOG_PATH'"
   carthage build $CARTHAGE_BUILD_OPTIONS --platform $CARTHAGE_PLATFORM --log-path "$CARTHAGE_LOG_PATH"
 else
+  echo "./carthage.sh build $CARTHAGE_BUILD_OPTIONS --platform $CARTHAGE_PLATFORM --log-path '$CARTHAGE_LOG_PATH'"
   ./carthage.sh build $CARTHAGE_BUILD_OPTIONS --platform $CARTHAGE_PLATFORM --log-path "$CARTHAGE_LOG_PATH"
 fi
 code=$? # or maybe log in other script
