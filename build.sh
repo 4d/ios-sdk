@@ -13,14 +13,12 @@ if [[ -z "${USE_XCFRAMEWORKS}" ]]; then
 
   if [[ $(file $(which carthage) | grep "x86_64" | wc -l) -eq 1 ]]; then
     echo "💡 carthage is x86_64. framework could be build in legacy way."
-    export USE_XCFRAMEWORKS=0
+    USE_XCFRAMEWORKS=0
   else
     >&2 echo "❌ You have no x86_64 carthage installed. we could not build std 'framework'. We will build 'xcframework' instead."
-    export USE_XCFRAMEWORKS=1
+    USE_XCFRAMEWORKS=1
   fi
-  export USE_XCFRAMEWORKS=0
 fi
-echo "USE_XCFRAMEWORKS=$USE_XCFRAMEWORKS"
 
 CARTHAGE_CHECKOUT_OPTIONS=""
 CARTHAGE_BUILD_OPTIONS="--cache-builds --no-use-binaries"
