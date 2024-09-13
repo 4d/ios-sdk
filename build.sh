@@ -9,22 +9,13 @@ else
 fi
 
 if [[ -z "${USE_XCFRAMEWORKS}" ]]; then
-  echo "no USE_XCFRAMEWORKS. try to check if we could do without ie. have a x86_64 carthage"
-
-  if [[ $(file $(which carthage) | grep "x86_64" | wc -l) -eq 1 ]]; then
-    echo "💡 carthage is x86_64. framework could be build in legacy way."
-    USE_XCFRAMEWORKS=0
-  else
-    >&2 echo "❌ You have no x86_64 carthage installed. we could not build std 'framework'. We will build 'xcframework' instead."
-    USE_XCFRAMEWORKS=1
-  fi
+  USE_XCFRAMEWORKS=1
 fi
 
 CARTHAGE_CHECKOUT_OPTIONS=""
 CARTHAGE_BUILD_OPTIONS="--cache-builds --no-use-binaries"
 if [ "$USE_XCFRAMEWORKS" -eq 1 ]; then
   CARTHAGE_BUILD_OPTIONS="$CARTHAGE_BUILD_OPTIONS --use-xcframeworks"
-  >&2 echo "⚠ xcframeworks activated. Maybe not yet compatible with 4D mobile app build. But you could edit an xcode project and integrate it"
   >&2 echo ""
 fi
 CARTHAGE_PLATFORM="iOS"
