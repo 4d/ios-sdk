@@ -32,6 +32,13 @@ CARTHAGE_REMOVE_CACHE=0
 ROME_USE=0
 XPROJ_UP_USE=1 # mandatory now because of project that import iOS 8
 
+# Some dependencies (IBAnimatable...) run swiftlint in a build phase when the binary is found.
+# We do not want to lint third party code, so a fake swiftlint is put first in PATH during the build.
+# Set DISABLE_SWIFTLINT=0 to keep the real one.
+if [[ -z "${DISABLE_SWIFTLINT}" ]]; then
+  DISABLE_SWIFTLINT=1
+fi
+
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 cd "$SCRIPT_DIR" # work only if in script dir
@@ -40,6 +47,33 @@ if [[ -z "$(which carthage)" ]]; then
   >&2 echo "❌ You must install carthage:"
   >&2 echo "> brew install carthage"
   exit 2
+fi
+
+# Install a fake swiftlint (and friends) in a temporary folder put first in PATH.
+# The folder is removed when this script exits, whatever the result.
+FAKE_BIN_DIR=""
+cleanup_fake_bin() {
+  if [[ -n "$FAKE_BIN_DIR" && -d "$FAKE_BIN_DIR" ]]; then
+    rm -rf "$FAKE_BIN_DIR"
+  fi
+}
+if [[ "$DISABLE_SWIFTLINT" -eq 1 ]]; then
+  if [[ -n "$(which swiftlint)" ]]; then
+    FAKE_BIN_DIR="$(mktemp -d -t iossdk-fakebin)"
+    trap cleanup_fake_bin EXIT INT TERM
+    cat > "$FAKE_BIN_DIR/swiftlint" <<'EOF'
+#!/bin/sh
+# Fake swiftlint installed by ios-sdk build.sh, does nothing and succeeds.
+case "$1" in
+  version|--version) echo "0.0.0" ;;
+  *) echo "swiftlint deactivated by build.sh" >&2 ;;
+esac
+exit 0
+EOF
+    chmod +x "$FAKE_BIN_DIR/swiftlint"
+    export PATH="$FAKE_BIN_DIR:$PATH"
+    echo "🚫 swiftlint deactivated for this build (fake one in $FAKE_BIN_DIR, set DISABLE_SWIFTLINT=0 to keep the real one)"
+  fi
 fi
 
 # Remove cache
@@ -90,8 +124,20 @@ if [[ "$XPROJ_UP_USE" -eq 1 ]]; then
     >&2 echo "❌ You must install xprojup:"
     >&2 echo "> sudo curl -sL https://phimage.github.io/xprojup/install.sh | bash"
     exit 2
-  fi 
-  xprojup --recursive Carthage/Checkouts # for project with target iOS 8.0 it could help to build
+  fi
+  XPROJUP_MIN_VERSION="0.1.0"
+  XPROJUP_VERSION="$(xprojup --version 2>/dev/null | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -1)" # versions before $XPROJUP_MIN_VERSION do not support --version
+  if [[ -z "$XPROJUP_VERSION" ]]; then
+    >&2 echo "❌ Unable to detect xprojup version (must be >= $XPROJUP_MIN_VERSION), please update it:"
+    >&2 echo "> sudo curl -sL https://phimage.github.io/xprojup/install.sh | bash"
+    exit 2
+  fi
+  if [[ "$(printf '%s\n' "$XPROJUP_MIN_VERSION" "$XPROJUP_VERSION" | sort -V | head -1)" != "$XPROJUP_MIN_VERSION" ]]; then
+    >&2 echo "❌ xprojup $XPROJUP_VERSION is too old (must be >= $XPROJUP_MIN_VERSION), please update it:"
+    >&2 echo "> sudo curl -sL https://phimage.github.io/xprojup/install.sh | bash"
+    exit 2
+  fi
+  xprojup --recursive --fix-deployment-target Carthage/Checkouts # for project with target iOS 8.0 it could help to build
 else
   >&2 echo "You must let activated prj upgrade because of some project lke XCGLogger"
   exit 1
