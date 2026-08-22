@@ -1,4 +1,35 @@
 #!/bin/bash   
+#
+# build.sh - build the iOS SDK (carthage) and sign it.
+#
+# Usage: ./build.sh [options]
+#   -x, --xcode <version>  build with a specific Xcode (ex: 16, 16.4), the build
+#                          stops if this version is not installed
+#   -h, --help             show this help
+#
+# Environment variables:
+#   XCODE_VERSION      same as --xcode
+#   XCODE_SELECT       1 to also switch xcode-select globally (needs sudo,
+#                      the previous one is restored at the end)
+#   SIGN_CERTIFICATE   signing certificate ('-' to deactivate the signature)
+#   SIGN_MANDATORY     1 to fail the build if the SDK could not be signed
+#   USE_XCFRAMEWORKS   1 (default) to build xcframeworks
+#   DISABLE_SWIFTLINT  1 (default) to deactivate swiftlint of the dependencies
+
+if [[ -z "${XCODE_VERSION:-}" ]]; then
+  XCODE_VERSION=""
+fi
+if [[ -z "${XCODE_SELECT:-}" ]]; then
+  XCODE_SELECT=0
+fi
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -x|--xcode) XCODE_VERSION="$2"; shift 2;;
+    -h|--help) sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'; exit 0;;
+    *) >&2 echo "❌ Unknown option: $1 (see ./build.sh --help)"; exit 2;;
+  esac
+done
 
 inside_git_repo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
 if [ "$inside_git_repo" ]; then
@@ -56,15 +87,62 @@ fi
 # Install a fake swiftlint (and friends) in a temporary folder put first in PATH.
 # The folder is removed when this script exits, whatever the result.
 FAKE_BIN_DIR=""
-cleanup_fake_bin() {
+XCODE_SELECT_RESTORE_DIR=""
+cleanup() {
   if [[ -n "$FAKE_BIN_DIR" && -d "$FAKE_BIN_DIR" ]]; then
     rm -rf "$FAKE_BIN_DIR"
+    FAKE_BIN_DIR=""
+  fi
+  # put back the Xcode that was selected before this build
+  if [[ -n "$XCODE_SELECT_RESTORE_DIR" ]]; then
+    echo ""
+    echo "🔨 Restoring xcode-select to $XCODE_SELECT_RESTORE_DIR"
+    sudo xcode-select -s "$XCODE_SELECT_RESTORE_DIR" \
+      || >&2 echo "⚠️  unable to restore xcode-select, do it yourself: sudo xcode-select -s '$XCODE_SELECT_RESTORE_DIR'"
+    XCODE_SELECT_RESTORE_DIR=""
   fi
 }
+trap cleanup EXIT INT TERM
+
+# ----------------------------------------------------------------------------
+# Xcode version to build with
+# ----------------------------------------------------------------------------
+
+if [[ -n "$XCODE_VERSION" ]]; then
+  echo "🔨 Xcode $XCODE_VERSION requested for this build"
+  if ! XCODE_DEVELOPER_DIR="$("$SCRIPT_DIR/xcodecheck.sh" "$XCODE_VERSION" --path)" || [[ -z "$XCODE_DEVELOPER_DIR" ]]; then
+    >&2 echo "❌ Could not build with Xcode $XCODE_VERSION, install it first (or build without --xcode)"
+    exit 2
+  fi
+  # xcodebuild, xcrun, carthage… all follow DEVELOPER_DIR, no sudo needed
+  export DEVELOPER_DIR="$XCODE_DEVELOPER_DIR"
+
+  # some tools ignore DEVELOPER_DIR and use the global selection, set XCODE_SELECT=1 for them
+  if [[ "$XCODE_SELECT" -eq 1 ]]; then
+    previous_developer_dir="$(xcode-select -p 2>/dev/null)"
+    if [[ "$previous_developer_dir" != "$DEVELOPER_DIR" ]]; then
+      echo "🔐 sudo is needed to switch xcode-select to $DEVELOPER_DIR ($previous_developer_dir will be restored at the end)"
+      if sudo xcode-select -s "$DEVELOPER_DIR"; then
+        XCODE_SELECT_RESTORE_DIR="$previous_developer_dir"
+      else
+        >&2 echo "❌ unable to switch xcode-select to $DEVELOPER_DIR"
+        exit 2
+      fi
+    fi
+  fi
+
+  # make sure the build will really use it
+  effective_version="$(/usr/bin/xcodebuild -version 2>/dev/null | head -1 | grep -Eo '[0-9]+(\.[0-9]+)*')"
+  if [[ "$effective_version" != "$XCODE_VERSION" && "$effective_version" != "$XCODE_VERSION".* ]]; then
+    >&2 echo "❌ xcodebuild still reports version '${effective_version:-unknown}' instead of $XCODE_VERSION, aborting to not build with the wrong Xcode"
+    exit 2
+  fi
+  echo "🔨 Building with Xcode $effective_version ($DEVELOPER_DIR)"
+fi
+
 if [[ "$DISABLE_SWIFTLINT" -eq 1 ]]; then
   if [[ -n "$(which swiftlint)" ]]; then
     FAKE_BIN_DIR="$(mktemp -d -t iossdk-fakebin)"
-    trap cleanup_fake_bin EXIT INT TERM
     cat > "$FAKE_BIN_DIR/swiftlint" <<'EOF'
 #!/bin/sh
 # Fake swiftlint installed by ios-sdk build.sh, does nothing and succeeds.

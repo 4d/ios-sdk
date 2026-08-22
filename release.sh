@@ -14,6 +14,8 @@
 #       --draft          create the release as a draft
 #       --prerelease     create the release as a pre-release
 #   -b, --build          build and archive before releasing (build.sh + sdkarchive.sh)
+#   -x, --xcode <version>   Xcode version to release (ex: 16, 16.4), the archive
+#                           must have been built with it, else nothing is released
 #       --authority <name>  expected signing authority (default: $SIGN_CERTIFICATE
 #                           or 'Developer ID Application')
 #       --no-sign-check     release even if the SDK is not signed (discouraged)
@@ -35,6 +37,7 @@ do_build=false
 assume_yes=false
 sign_authority="${SIGN_CERTIFICATE:-Developer ID Application}"
 sign_check=true
+xcode_wanted="${XCODE_VERSION:-}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -45,10 +48,11 @@ while [[ $# -gt 0 ]]; do
     --draft) draft=true; shift;;
     --prerelease) prerelease=true; shift;;
     -b|--build) do_build=true; shift;;
+    -x|--xcode) xcode_wanted="$2"; shift 2;;
     --authority) sign_authority="$2"; shift 2;;
     --no-sign-check) sign_check=false; shift;;
     -y|--yes) assume_yes=true; shift;;
-    -h|--help) sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'; exit 0;;
+    -h|--help) sed -n '2,24p' "$0" | sed 's/^# \{0,1\}//'; exit 0;;
     *) echo "Unknown option: $1" >&2; exit 1;;
   esac
 done
@@ -58,6 +62,9 @@ warn()  { echo "⚠️  $*" >&2; }
 fail()  { echo "❌ $*" >&2; exit 1; }
 
 is_tty() { [[ -t 0 && -t 1 ]]; }
+
+# '16' matches '16', '16.4' and '16.4.1' but not '161'
+version_matches() { [[ "$2" == "$1" || "$2" == "$1".* ]]; }
 
 confirm() {
   $assume_yes && return 0
@@ -141,8 +148,15 @@ info "Using GitHub account '$account' on $repo ($(repo_permission))"
 # ----------------------------------------------------------------------------
 
 if $do_build; then
-  info "Building…"
-  SIGN_MANDATORY=1 ./build.sh # a release must be signed
+  build_cmd=(./build.sh)
+  if [[ -n "$xcode_wanted" ]]; then
+    # fail now instead of after a long build
+    "$SCRIPT_DIR/xcodecheck.sh" "$xcode_wanted" \
+      || fail "Cannot build the release with Xcode $xcode_wanted, it is not installed on this machine."
+    build_cmd+=(--xcode "$xcode_wanted")
+  fi
+  info "Building… (${build_cmd[*]})"
+  SIGN_MANDATORY=1 "${build_cmd[@]}" # a release must be signed
   ./sdkarchive.sh "$(basename "${zip_file%.zip}")"
 fi
 
@@ -158,6 +172,17 @@ xcode_build=$(sed -n 's/.*Build version \(.*\)/\1/p' <<< "$xcode_version_content
 sdk_version=$(unzip -p "$zip_file" sdkVersion 2>/dev/null | head -1 || true)
 
 info "Archive $zip_file built with Xcode $xcode_version${xcode_build:+ ($xcode_build)}"
+
+if [[ -n "$xcode_wanted" ]] && ! version_matches "$xcode_wanted" "$xcode_version"; then
+  echo >&2
+  warn "Xcode $xcode_wanted was asked but $zip_file was built with Xcode $xcode_version"
+  if "$SCRIPT_DIR/xcodecheck.sh" "$xcode_wanted" --quiet; then
+    warn "Xcode $xcode_wanted is installed, rebuild the archive: ./release.sh --build --xcode $xcode_wanted"
+  else
+    "$SCRIPT_DIR/xcodecheck.sh" "$xcode_wanted" || true # tell which ones are installed
+  fi
+  fail "No release created: the archive was not built with Xcode $xcode_wanted."
+fi
 
 # ----------------------------------------------------------------------------
 # 2.b never release an unsigned SDK

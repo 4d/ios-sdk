@@ -29,6 +29,16 @@ To build with carthage simply use the provided script. (more detail bellow)
 ./build.sh
 ```
 
+To build with a specific Xcode version (it must be installed, else the build stops):
+
+```bash
+./build.sh --xcode 16.4      # or XCODE_VERSION=16.4 ./build.sh
+./xcodecheck.sh --list       # the Xcode installed on this machine
+```
+
+`DEVELOPER_DIR` is used, so no `sudo` is needed. If a tool ignores it, `XCODE_SELECT=1 ./build.sh --xcode 16.4`
+also switches `xcode-select` globally (asks for `sudo`, and restores the previous one at the end).
+
 ### with Swift Package Manager
 
 `Package.swift` exists but not tested often, and not integrated with "4D Mobile App" component. (but could be implemented)
@@ -54,8 +64,9 @@ You could also put an archive "ios.zip" inside
   - `sdkstriparch.sh`: remove useless architectures
   - `sdkclean.sh`: remove some files from sources
   - `sdksign.sh`: with a certificate installed you could sign it (useful if embeded in a mac os app before mobile one)
-  - `sdkchecksign.sh`: check that the frameworks are signed (build fails if not)
+  - `sdkchecksign.sh`: check that the frameworks are signed (warning only, unless `SIGN_MANDATORY=1`)
   - `sdklicenses.sh`: update Licenses files
+  - `xcodecheck.sh`: find the Xcode installed, used by `--xcode` to stop early if the version is missing
 
 - `sdkarchive.sh`: if we want to archive to zip with mandatory files
 - `sdkchecksign.sh`: check the signature of the frameworks, of the current folder or of an archive
@@ -65,10 +76,13 @@ You could also put an archive "ios.zip" inside
   ```
 - `release.sh`: publish `ios.zip` as a new github release, named after the Xcode version used to build it
   ```bash
-  ./release.sh               # from an existing ios.zip
-  ./release.sh --build       # build, archive, then release
+  ./release.sh                      # from an existing ios.zip
+  ./release.sh --build              # build, archive, then release
+  ./release.sh --xcode 16.4         # only if ios.zip was built with Xcode 16.4
+  ./release.sh --build --xcode 16.4 # build with Xcode 16.4, then release
   ```
-  It refuses to create the release if the SDK is not signed.
+  It refuses to create the release if the SDK is not signed, or if the archive was not built
+  with the Xcode version passed to `--xcode`.
 
 ### configuration files
 
