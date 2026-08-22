@@ -54,9 +54,21 @@ You could also put an archive "ios.zip" inside
   - `sdkstriparch.sh`: remove useless architectures
   - `sdkclean.sh`: remove some files from sources
   - `sdksign.sh`: with a certificate installed you could sign it (useful if embeded in a mac os app before mobile one)
+  - `sdkchecksign.sh`: check that the frameworks are signed (build fails if not)
   - `sdklicenses.sh`: update Licenses files
 
 - `sdkarchive.sh`: if we want to archive to zip with mandatory files
+- `sdkchecksign.sh`: check the signature of the frameworks, of the current folder or of an archive
+  ```bash
+  ./sdkchecksign.sh          # check Carthage/Build
+  ./sdkchecksign.sh ios.zip  # check inside the archive
+  ```
+- `release.sh`: publish `ios.zip` as a new github release, named after the Xcode version used to build it
+  ```bash
+  ./release.sh               # from an existing ios.zip
+  ./release.sh --build       # build, archive, then release
+  ```
+  It refuses to create the release if the SDK is not signed.
 
 ### configuration files
 

@@ -14,6 +14,9 @@
 #       --draft          create the release as a draft
 #       --prerelease     create the release as a pre-release
 #   -b, --build          build and archive before releasing (build.sh + sdkarchive.sh)
+#       --authority <name>  expected signing authority (default: $SIGN_CERTIFICATE
+#                           or 'Developer ID Application')
+#       --no-sign-check     release even if the SDK is not signed (discouraged)
 #   -y, --yes            do not ask for confirmation
 #   -h, --help           show this help
 
@@ -30,6 +33,8 @@ draft=false
 prerelease=false
 do_build=false
 assume_yes=false
+sign_authority="${SIGN_CERTIFICATE:-Developer ID Application}"
+sign_check=true
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -40,8 +45,10 @@ while [[ $# -gt 0 ]]; do
     --draft) draft=true; shift;;
     --prerelease) prerelease=true; shift;;
     -b|--build) do_build=true; shift;;
+    --authority) sign_authority="$2"; shift 2;;
+    --no-sign-check) sign_check=false; shift;;
     -y|--yes) assume_yes=true; shift;;
-    -h|--help) sed -n '2,19p' "$0" | sed 's/^# \{0,1\}//'; exit 0;;
+    -h|--help) sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'; exit 0;;
     *) echo "Unknown option: $1" >&2; exit 1;;
   esac
 done
@@ -135,7 +142,7 @@ info "Using GitHub account '$account' on $repo ($(repo_permission))"
 
 if $do_build; then
   info "Building…"
-  ./build.sh
+  SIGN_MANDATORY=1 ./build.sh # a release must be signed
   ./sdkarchive.sh "$(basename "${zip_file%.zip}")"
 fi
 
@@ -151,6 +158,32 @@ xcode_build=$(sed -n 's/.*Build version \(.*\)/\1/p' <<< "$xcode_version_content
 sdk_version=$(unzip -p "$zip_file" sdkVersion 2>/dev/null | head -1 || true)
 
 info "Archive $zip_file built with Xcode $xcode_version${xcode_build:+ ($xcode_build)}"
+
+# ----------------------------------------------------------------------------
+# 2.b never release an unsigned SDK
+# ----------------------------------------------------------------------------
+
+if ! $sign_check; then
+  warn "Signature check skipped (--no-sign-check), the released SDK may be unsigned"
+elif [[ "$sign_authority" == "-" ]]; then
+  fail "Signature is deactivated (SIGN_CERTIFICATE=-): an unsigned SDK must not be released.
+   Build with a signing certificate, or force with --no-sign-check."
+else
+  info "Checking the signature of the frameworks inside ${zip_file}…"
+  if ! "$SCRIPT_DIR/sdkchecksign.sh" "$zip_file" --authority "$sign_authority" --quiet; then
+    echo >&2
+    if ! security find-certificate -c "$sign_authority" >/dev/null 2>&1; then
+      warn "The signing certificate '$sign_authority' is not in your keychain."
+      warn "Ask for the '$sign_authority' certificate and install it (double click the .p12/.cer),"
+      warn "check it with: security find-certificate -c '$sign_authority'"
+    else
+      warn "The certificate '$sign_authority' is available, sign then archive again:"
+      warn "  ./sdksign.sh '$sign_authority' && ./sdkarchive.sh"
+    fi
+    fail "No release created: the SDK in $zip_file is not signed."
+  fi
+  info "SDK signed with '$sign_authority' ✅"
+fi
 
 # ----------------------------------------------------------------------------
 # 3. name of the release, following the previous one
@@ -181,6 +214,7 @@ if [[ -z "$notes" ]]; then
   notes="Built with Xcode ${xcode_version}"
   [[ -n "$xcode_build" ]] && notes+=" (build ${xcode_build})"
   [[ -n "$sdk_version" ]] && notes+=$'\n'"SDK version: \`${sdk_version}\`"
+  $sign_check && [[ "$sign_authority" != "-" ]] && notes+=$'\n'"Signed with: ${sign_authority}"
   [[ -n "$previous_tag" ]] && notes+=$'\n'"Previous release: ${previous_tag}"
 fi
 

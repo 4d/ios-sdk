@@ -23,6 +23,10 @@ CARTHAGE_LOG_PATH="build.log"
 if [[ -z "$SIGN_CERTIFICATE" ]]; then
   SIGN_CERTIFICATE="Developer ID Application"
 fi
+# Set SIGN_MANDATORY to 1 to fail the build if the sdk could not be signed (ex: to release it)
+if [[ -z "$SIGN_MANDATORY" ]]; then
+  SIGN_MANDATORY=0
+fi
 
 if [ "$USE_XCFRAMEWORKS" -eq 1 ]; then
   rm -Rf Carthage/Build/$CARTHAGE_PLATFORM
@@ -233,7 +237,7 @@ if [[ "$code" -eq 0 ]]; then
     "$SCRIPT_DIR/sdkstriparch.sh"
   fi
 
-  # sign if possible
+  # sign if possible (set SIGN_CERTIFICATE to - to deactivate, SIGN_MANDATORY to 1 to make it a build error)
   if [[ "$SIGN_CERTIFICATE" != "-" ]]; then
     echo ""
     security find-certificate -c "$SIGN_CERTIFICATE" >/dev/null 2>&1
@@ -241,8 +245,24 @@ if [[ "$code" -eq 0 ]]; then
 
     if [[ $certificate_exists -eq 0 ]]; then
       "$SCRIPT_DIR/sdksign.sh" "$SIGN_CERTIFICATE"
+
+      # do not produce an sdk that could be released unsigned
+      echo ""
+      if ! "$SCRIPT_DIR/sdkchecksign.sh" --quiet --authority "$SIGN_CERTIFICATE"; then
+        if [[ "$SIGN_MANDATORY" -eq 1 ]]; then
+          >&2 echo "❌ signature check failed, the sdk must not be released (SIGN_MANDATORY=1)"
+          code=1
+        else
+          >&2 echo "⚠️  signature check failed, do not release this sdk. Set SIGN_MANDATORY to 1 to make it a build error"
+        fi
+      fi
     else
-      echo "⚠️  no signature done, signing certificate not found '$SIGN_CERTIFICATE'. You could configure SIGN_CERTIFICATE env variable (set to - to deactivate)"
+      if [[ "$SIGN_MANDATORY" -eq 1 ]]; then
+        >&2 echo "❌ no signature done, signing certificate not found '$SIGN_CERTIFICATE'. You could configure SIGN_CERTIFICATE env variable (set to - to deactivate)"
+        code=1
+      else
+        echo "⚠️  no signature done, signing certificate not found '$SIGN_CERTIFICATE'. You could configure SIGN_CERTIFICATE env variable (set to - to deactivate)"
+      fi
     fi
   fi
 fi
